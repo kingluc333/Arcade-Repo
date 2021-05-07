@@ -15,17 +15,38 @@ public class Spawnfood : MonoBehaviour
 
     void Spawn()
     {
-        // x position between Left and right border
-        int x = (int)Random.Range(borderLeft.position.x *2,
-                                  borderRight.position.x * 2);
-
-        // y position between top and bottom border
-        int y = (int)Random.Range(borderBottom.position.y * 2,
-                                  borderTop.position.y * 2);
-
+        float x = 0;
+        float y = 0;
+        int randx = Random.Range(0,2);
+        if (randx == 0)
+        {
+            // x position between Left and right border
+            x = (int)Random.Range(borderLeft.position.x,
+                                    borderRight.position.x);
+        }
+        if (randx == 1)
+        {
+            // x position between Left and right border
+            x = ((int)Random.Range((borderLeft.position.x -.5f) ,
+                                    borderRight.position.x) + .5f);
+        
+        }
+        int randy = Random.Range(0,2);
+        if (randy == 0)
+        {
+            // x position between Left and right border
+            y = (int)Random.Range(borderBottom.position.y,
+                                    borderTop.position.y);
+        }
+        if (randy == 1)
+        {
+            // x position between Left and right border
+            y = ((int)Random.Range((borderBottom.position.y - .5f),
+                                    borderTop.position.y) +.5f);
+        }
         // Instantiate the food at (x, y)
         Instantiate(foodPrefab,
-                    new Vector2(x / 2, y / 2),
+                    new Vector2(x, y),
                     Quaternion.identity);                          
     }
 
