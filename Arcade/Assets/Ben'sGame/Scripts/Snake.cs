@@ -4,33 +4,30 @@ using UnityEngine;
 using System.Linq;
 public class Snake : MonoBehaviour
 {
-    // Current Movement Direction
-    // (by default it moves to the right)
-    Vector2 dir = new Vector2(-0.5f, 0);
+    bool end = false;
+    Vector2 snake_dir = new Vector2(-0.5f, 0);
 
     // Start is called before the first frame update
     void Start()
     {
         // Move the snake every 300ms
-        InvokeRepeating("Move", 0.2f, 0.2f);
+        InvokeRepeating("Move", 0.15f, 0.15f);
     }
-
-    bool end = false;
 
     // Update is called once per frame
     void Update()
     {   
-        if(Input.GetKey(KeyCode.RightArrow))
-            dir = new Vector2(0.5f, 0);
-        else if (Input.GetKey(KeyCode.LeftArrow))
-            dir = new Vector2(-0.5f, 0);
-        else if (Input.GetKey(KeyCode.DownArrow))
-            dir = new Vector2(0, -0.5f);
-        else if (Input.GetKey(KeyCode.UpArrow))
-            dir = new Vector2(0, 0.5f);
-
-        if (end)
-            Debug.Log("HI");
+        if (!end)
+        {
+            if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
+                snake_dir = new Vector2(0.5f, 0);
+            else if (Input.GetKey(KeyCode.LeftArrow) && snake_dir != new Vector2(0.5f, 0))
+                snake_dir = new Vector2(-0.5f, 0);
+            else if (Input.GetKey(KeyCode.DownArrow) && snake_dir != new Vector2(0, -0.5f))
+                snake_dir = new Vector2(0, -0.5f);
+            else if (Input.GetKey(KeyCode.UpArrow) && snake_dir != new Vector2(0, 0.5f))
+                snake_dir = new Vector2(0, 0.5f);
+        }
     }
     
     List<Transform> tail = new List<Transform>();
@@ -38,21 +35,24 @@ public class Snake : MonoBehaviour
     // Snake tail prefab
     public GameObject tailPrefab;
     bool ate = false;
-
+    void Gameover()
+            {
+                (end) = true;
+                Debug.Log("Game Over");
+                snake_dir = new Vector2(0, -1);
+            }
     void OnTriggerEnter2D(Collider2D coll)
-        {
+    {
+
         if (coll.name.StartsWith("Food"))
         {
             ate = true;
             Destroy(coll.gameObject);
         }
-        else if (coll.name.StartsWith("Wall"))
+        if (coll.name.StartsWith("Tail"))
         {
-            (end) = true;
-        }
-        else if (coll.name.StartsWith("Head"))
-        {
-            (end) = true;
+            Debug.Log("Mistakes were made");
+            Gameover();
         }
     }
     void Move()
@@ -61,7 +61,7 @@ public class Snake : MonoBehaviour
 
         // Move head into new direction (now there is a gap)
         // Do Movement Stuff...
-        transform.Translate(dir);
+        transform.Translate(snake_dir);
 
         if (ate)
         {
@@ -77,8 +77,6 @@ public class Snake : MonoBehaviour
             tail.Last().position = v;
             tail.Insert(0, tail.Last());
             tail.RemoveAt(tail.Count-1);
+            }    
         }
-    }
-        // Keep track of Trail
-
 }

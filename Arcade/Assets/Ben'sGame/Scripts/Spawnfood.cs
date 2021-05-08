@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,11 +13,21 @@ public class Spawnfood : MonoBehaviour
     public Transform borderLeft;
     public Transform borderRight;
 
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.name.Equals("Snake Head"))
+            {
+                Debug.Log("You're supposed to spawn");
+                Spawn();
+            }
+    }
     void Spawn()
     {
+
         float x = 0;
         float y = 0;
         int randx = Random.Range(0,2);
+        Debug.Log("spawn started");
         if (randx == 0)
         {
             // x position between Left and right border
@@ -47,18 +57,18 @@ public class Spawnfood : MonoBehaviour
         // Instantiate the food at (x, y)
         Instantiate(foodPrefab,
                     new Vector2(x, y),
-                    Quaternion.identity);                          
+                    Quaternion.identity);
+        Debug.Log("Food Spawned");                   
     }
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        InvokeRepeating("Spawn", 3, 4);
+        Spawn();
     }
-
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
