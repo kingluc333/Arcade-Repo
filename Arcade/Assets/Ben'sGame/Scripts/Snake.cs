@@ -7,16 +7,19 @@ public class Snake : MonoBehaviour
     bool end = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
 
+    public Spawnfood spawn_food;
+
     // Start is called before the first frame update
     void Start()
     {
         // Move the snake every 300ms
-        InvokeRepeating("Move", 0.15f, 0.15f);
+        InvokeRepeating("Move", 0.13f, 0.13f);
     }
 
     // Update is called once per frame
     void Update()
     {   
+        
         if (!end)
         {
             if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
@@ -35,25 +38,42 @@ public class Snake : MonoBehaviour
     // Snake tail prefab
     public GameObject tailPrefab;
     bool ate = false;
-    void Gameover()
-            {
-                (end) = true;
-                Debug.Log("Game Over");
-                snake_dir = new Vector2(0, -1);
-            }
+    
     void OnTriggerEnter2D(Collider2D coll)
     {
-
         if (coll.name.StartsWith("Food"))
         {
             ate = true;
             Destroy(coll.gameObject);
+            spawn_food.Spawn();
         }
-        if (coll.name.StartsWith("Tail"))
+        if (coll.name.StartsWith("Tail") || coll.name.StartsWith("Wall"))
         {
-            Debug.Log("Mistakes were made");
             Gameover();
         }
+    }
+    void Gameover()
+    {
+        IEnumerator snake_pause()
+        {
+            snake_dir = new Vector2(0, 0);
+            yield return new WaitForSeconds(.4f);
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            yield return new WaitForSeconds(.1f);
+            Debug.Log("finished second wait");
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            yield return new WaitForSeconds(.1f);
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            yield return new WaitForSeconds(.1f);
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            yield return new WaitForSeconds(.1f);
+            gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            yield return new WaitForSeconds(3);
+            snake_dir = new Vector2(0, -1);
+        }
+        Debug.Log("game over");
+        (end) = true;
+        StartCoroutine(snake_pause());
     }
     void Move()
     {
@@ -77,6 +97,6 @@ public class Snake : MonoBehaviour
             tail.Last().position = v;
             tail.Insert(0, tail.Last());
             tail.RemoveAt(tail.Count-1);
-            }    
-        }
+        }    
+    }
 }
