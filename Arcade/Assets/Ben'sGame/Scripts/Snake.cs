@@ -9,20 +9,20 @@ public class Snake : MonoBehaviour
     public Start_Spawnfood _Start_Spawnfood;
     void Start()
     {
-        InvokeRepeating("Move", 0.13f, 0.13f);
+        InvokeRepeating("Move", 0.11f, 0.11f);
     }
     void Update()
     {   
         
         if (!end)
         {
-            if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
+            if(Input.GetKey(KeyCode.RightArrow) & (snake_dir != new Vector2(-0.5f, 0)))
                 snake_dir = new Vector2(0.5f, 0);
-            else if (Input.GetKey(KeyCode.LeftArrow) && snake_dir != new Vector2(0.5f, 0))
+            if (Input.GetKey(KeyCode.LeftArrow) & snake_dir != new Vector2(0.5f, 0))
                 snake_dir = new Vector2(-0.5f, 0);
-            else if (Input.GetKey(KeyCode.DownArrow) && snake_dir != new Vector2(0, -0.5f))
+            if (Input.GetKey(KeyCode.DownArrow) & snake_dir != new Vector2(0, 0.5f))
                 snake_dir = new Vector2(0, -0.5f);
-            else if (Input.GetKey(KeyCode.UpArrow) && snake_dir != new Vector2(0, 0.5f))
+            if (Input.GetKey(KeyCode.UpArrow) & snake_dir != new Vector2(0, -0.5f))
                 snake_dir = new Vector2(0, 0.5f);
         }
     }
@@ -62,7 +62,7 @@ public class Snake : MonoBehaviour
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
             yield return new WaitForSeconds(3);
-            snake_dir = new Vector2(0, -1);
+            snake_dir = new Vector2(0, -2);
         }
         Debug.Log("game over");
         (end) = true;
