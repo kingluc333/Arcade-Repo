@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawnfood : MonoBehaviour
+public class Start_Spawnfood : MonoBehaviour
 {
-    // Food Prefab
     public GameObject foodPrefab;
-
-    // Borders
     public Transform borderTop;
     public Transform borderBottom;
     public Transform borderLeft;
@@ -23,13 +20,11 @@ public class Spawnfood : MonoBehaviour
         {
             x = (int)Random.Range(borderLeft.position.x,
                                     borderRight.position.x);
-            Debug.Log(x);
         }
         else
         {
             x = ((int)Random.Range((borderLeft.position.x -.5f),
                                     borderRight.position.x) + .5f);
-            Debug.Log(x);
         }
         int randy = Random.Range(0,2);
         if (randy == 0)
@@ -52,7 +47,7 @@ public class Spawnfood : MonoBehaviour
 
     void Start()
     {
-
+        Spawn();
     }
     // Update is called once per frame
     void Update()

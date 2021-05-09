@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -6,17 +6,11 @@ public class Snake : MonoBehaviour
 {
     bool end = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
-
-    public Spawnfood spawn_food;
-
-    // Start is called before the first frame update
+    public Start_Spawnfood _Start_Spawnfood;
     void Start()
     {
-        // Move the snake every 300ms
         InvokeRepeating("Move", 0.13f, 0.13f);
     }
-
-    // Update is called once per frame
     void Update()
     {   
         
@@ -38,14 +32,13 @@ public class Snake : MonoBehaviour
     // Snake tail prefab
     public GameObject tailPrefab;
     bool ate = false;
-    
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.name.StartsWith("Food"))
         {
             ate = true;
             Destroy(coll.gameObject);
-            spawn_food.Spawn();
+            _Start_Spawnfood.Spawn();
         }
         if (coll.name.StartsWith("Tail") || coll.name.StartsWith("Wall"))
         {
