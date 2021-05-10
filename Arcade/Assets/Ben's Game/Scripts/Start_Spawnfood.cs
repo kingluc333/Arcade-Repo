@@ -9,43 +9,52 @@ public class Start_Spawnfood : MonoBehaviour
     public Transform borderBottom;
     public Transform borderLeft;
     public Transform borderRight;
-    public GameObject tail_object;
+    public Snake snake;
+    bool food_Hits_Tail = false;
 
     public void Spawn()
     {
         float x = 0;
         float y = 0;
         int randx = Random.Range(0,2);
-        do
-        {
-            if (randx == 0)
+            do
             {
-                x = (int)Random.Range(borderLeft.position.x,
-                                        borderRight.position.x);
+                if (randx == 0)
+                {
+                    x = (int)Random.Range(borderLeft.position.x,
+                                            borderRight.position.x);
+                }
+                else
+                {
+                    x = ((int)Random.Range((borderLeft.position.x -.5f),
+                                            borderRight.position.x) + .5f);
+                }
+                int randy = Random.Range(0,2);
+                if (randy == 0)
+                {
+                    y = (int)Random.Range(borderBottom.position.y,
+                                            borderTop.position.y);
+                }
+                else
+                {
+                    y = ((int)Random.Range((borderBottom.position.y - .5f),
+                                            borderTop.position.y) +.5f);
+                }
+                food_Hits_Tail = false;
+                foreach (Transform t in snake.tail)
+                {
+                    if(t.transform.position == new Vector3(x,y,0))
+                    {
+                        food_Hits_Tail = true;
+                    }
+                }
             }
-            else
-            {
-                x = ((int)Random.Range((borderLeft.position.x -.5f),
-                                        borderRight.position.x) + .5f);
-            }
-            int randy = Random.Range(0,2);
-            if (randy == 0)
-            {
-                y = (int)Random.Range(borderBottom.position.y,
-                                        borderTop.position.y);
-            }
-            else
-            {
-                y = ((int)Random.Range((borderBottom.position.y - .5f),
-                                        borderTop.position.y) +.5f);
-            }
-        }
-        while((tail_object.transform.position.x, tail_object.transform.position.y) == (x, y));
+            while(food_Hits_Tail);
         Instantiate(foodPrefab,
                     new Vector2(x, y),
                     Quaternion.identity);
-        Debug.Log("food spawned");
-                           
+        
+        Debug.Log("food spawned");      
     }
 
 
