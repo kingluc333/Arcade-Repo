@@ -6,11 +6,19 @@ public class Block : MonoBehaviour
 {
     public GameObject clone;
 
-    Vector3 roundedMovement;
-    Vector2[] rot_data;
+    public bool is_falling = true;
+
+    public float fall_interval = 1;
 
     //1 - Red, 2 - Green, 3 - Blue, 4 - Orange, 5 - Purple, 6 - Yellow, 7 - Cyan
-    int block_id;
+    public int block_id;
+
+    Vector3 rounded_movement;
+    Vector2[] rot_data;
+    GameObject fallen_blocks_parent;
+    
+    float previous_time;
+
     //1 - 4
     int rotation;
 
@@ -19,32 +27,18 @@ public class Block : MonoBehaviour
         //Non-mono, so no start function; have to initialize here
         Rotation_Data.PopulateDictionary();
 
-        SetBlockID();
-
         rotation = 1;
+        previous_time = Time.time;
+        fallen_blocks_parent = GameObject.Find("Fallen Blocks");
     }
 
     void Update ()
     {
-        GetInput(); //Listens for user input
-        //Fall(); //Initiates checks for falling down
-    }
+        //Listens for user input
+        GetInput();
 
-    //Assigns block ID in "Start" based on name
-    void SetBlockID ()
-    {
-        string name = gameObject.name;
-
-        switch (name)
-        {
-            case "Red": block_id = 1; break;
-            case "Green": block_id = 2; break;
-            case "Blue": block_id = 3; break;
-            case "Orange": block_id = 4; break;
-            case "Purple": block_id = 5; break;
-            case "Yellow": block_id = 6; break;
-            case "Cyan": block_id = 7; break;
-        }
+        //Handles falling process
+        if (is_falling) { Fall(); }
     }
 
     void GetInput ()
@@ -58,19 +52,19 @@ public class Block : MonoBehaviour
             if (rotation == 4) { rotation = 1; } else rotation++;
 
             //Actual rotation
-            RotateBlock(gameObject);
+            RotateBlock(gameObject, rotation);
         }
         //Move right
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             //Check if valid
-            if (CheckValidMovement(1, rotation)) { transform.Translate(Vector3.right); }
+            if (IsAbleToMove(1, rotation)) { transform.Translate(Vector3.right); }
         }
         //Move left
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             //Check if valid
-            transform.Translate(Vector3.left);
+            if (IsAbleToMove(2, rotation)) { transform.Translate(Vector3.left); }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -80,10 +74,24 @@ public class Block : MonoBehaviour
         //Ability to store pieces as well
     }
 
-    void RotateBlock (GameObject g)
+    //Handles the block falling mechanic
+    void Fall ()
+    {
+        if (Time.time > previous_time + fall_interval)
+        {
+            if (IsAbleToMove(3, rotation))
+            {
+                transform.Translate(Vector3.down);
+                previous_time = Time.time;
+            }
+        }
+    }
+
+    //Actually rotates based off the rotation data
+    void RotateBlock (GameObject g, int rot)
     {
         //Give Rotation_Data the rotation and block_id, get a vector array in return
-        rot_data = Rotation_Data.GiveRotationData(block_id, rotation);
+        rot_data = Rotation_Data.GiveRotationData(block_id, rot);
             
         //Rotate the block
         for (int i = 0; i < 4; i++) 
@@ -92,59 +100,56 @@ public class Block : MonoBehaviour
         }
     }
 
-    bool CheckValidMovement (int move_type, int rotation)
+    //Initiates the clone-check method for movement and returns the findings
+    bool IsAbleToMove (int move_type, int rot)
     {
-        //Move right
-        if (move_type == 1)
+        //Determining where to spawn clone
+        Vector3 v = new Vector3(0f, 0f, 0f);
+        switch(move_type)
         {
-            Vector3 v = new Vector3 (transform.position.x + 1, transform.position.y, 0);
-            GameObject c =  Instantiate(clone, v, Quaternion.identity);
-
-            RotateBlock(c);
-
-            bool canMove = false;
-
-            canMove = DoesCloneCollide(c);
-
-            Destroy(c);
-            return !canMove;
-        }
-        //Move left
-        else if (move_type == 2)
-        {
-
-        }
-        //Move down
-        else if (move_type == 3)
-        {
-
-        }
-        //Rotate
-        else if (move_type == 4)
-        {
-
+            case 1: v = new Vector3 (transform.position.x + 1, transform.position.y, 0); break;
+            case 2: v = new Vector3 (transform.position.x - 1, transform.position.y, 0); break;
+            case 3: v = new Vector3 (transform.position.x, transform.position.y - 1, 0); break;
         }
 
-        return false;
+        //Spawning clone and match rotation
+        GameObject c =  Instantiate(clone, v, Quaternion.identity);
+        RotateBlock(c, rot);
+
+        //Checking for collision, deleting clone, returning yay or nay on move
+        bool canMove = !DoesCloneCollideOnMove(c);
+        Destroy(c);
+        return canMove;
     }
 
-    bool DoesCloneCollide (GameObject c)
+    //Checking for all collisions a movement clone may encounter
+    bool DoesCloneCollideOnMove (GameObject c)
     {
         bool b = false;
+
+        //Checking for collision with walls and floor
         foreach(Transform child in c.transform)
         {
-            if (child.transform.position.x > 10.5) { b = true; }
+            if (child.transform.position.x > 10.5 || 
+                child.transform.position.x < 1.5  ||
+                child.transform.position.y < 1.5)
+            { b = true; }
         }
+        //Checking for collision with fallen blocks
+        foreach(Transform child in c.transform)
+        {
+            foreach(Transform fallen_block in fallen_blocks_parent.transform)
+            {
+                if (child.transform.position == fallen_block.transform.position)
+                { b = true; }
+            }
+        }
+
         return b;
     }
 
-    // void RoundMovement ()
-    // {
-    //     roundedMovement.x = Mathf.Round(transform.position.x * 1000);
-    //     roundedMovement.y = Mathf.Round(transform.position.y * 1000);
-    //     roundedMovement.x /= 1000;
-    //     roundedMovement.y /= 1000;
+    void IsAbleToRotate ()
+    {
 
-    //     transform.position = roundedMovement;
-    // }
+    }
 }
