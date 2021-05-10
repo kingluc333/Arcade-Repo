@@ -116,7 +116,7 @@ public class Snake : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(2);
             snake_dir = new Vector2(0, -2);
 
         }
