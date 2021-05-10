@@ -5,9 +5,12 @@ using System.Linq;
 public class Snake : MonoBehaviour
 {
     bool end = false;
+    bool ate = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
     public Start_Spawnfood _Start_Spawnfood;
     private Collider snake_coll;
+    public List<Transform> tail = new List<Transform>();
+    public GameObject tailPrefab;
     void Start()
     {
         InvokeRepeating("Move", 1, 0.11f);
@@ -18,22 +21,17 @@ public class Snake : MonoBehaviour
         
         if (!end)
         {
-            if(Input.GetKey(KeyCode.RightArrow) & (snake_dir != new Vector2(-0.5f, 0)))
+            if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
                 snake_dir = new Vector2(0.5f, 0);
-            if (Input.GetKey(KeyCode.LeftArrow) & snake_dir != new Vector2(0.5f, 0))
+            if (Input.GetKey(KeyCode.LeftArrow) && snake_dir != new Vector2(0.5f, 0))
                 snake_dir = new Vector2(-0.5f, 0);
-            if (Input.GetKey(KeyCode.DownArrow) & snake_dir != new Vector2(0, 0.5f))
+            if (Input.GetKey(KeyCode.DownArrow) && snake_dir != new Vector2(0, 0.5f))
                 snake_dir = new Vector2(0, -0.5f);
-            if (Input.GetKey(KeyCode.UpArrow) & snake_dir != new Vector2(0, -0.5f))
+            if (Input.GetKey(KeyCode.UpArrow) && snake_dir != new Vector2(0, -0.5f))
                 snake_dir = new Vector2(0, 0.5f);
         }
     }
     
-    List<Transform> tail = new List<Transform>();
-
-    // Snake tail prefab
-    public GameObject tailPrefab;
-    bool ate = false;
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.name.StartsWith("Food"))
@@ -48,6 +46,26 @@ public class Snake : MonoBehaviour
             Debug.Log("Hit tail or wall");
             Gameover();
         }
+    }
+    void Move()
+    {
+        Vector2 v = transform.position;
+        transform.Translate(snake_dir);
+        if (ate)
+        {
+            Debug.Log("Food ate");
+            GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
+
+            tail.Insert(0, g.transform);
+
+            ate = false;
+        }
+        else if (tail.Count > 0)
+        {
+            tail.Last().position = v;
+            tail.Insert(0, tail.Last());
+            tail.RemoveAt(tail.Count - 1);
+        }    
     }
     void Gameover()
     {
@@ -72,28 +90,5 @@ public class Snake : MonoBehaviour
         Debug.Log("game over");
         (end) = true;
         StartCoroutine(snake_pause());
-    }
-    void Move()
-    {
-        // Move head into new direction (now there is a gap)
-        // Do Movement Stuff...
-        Vector2 v = transform.position;
-        transform.Translate(snake_dir);
-        if (ate)
-        {
-            Debug.Log("Food ate");
-            GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
-
-            tail.Insert(0, g.transform);
-
-            ate = false;
-        }
-        // Does tail exist?
-        else if (tail.Count > 0)
-        {
-            tail.Last().position = v;
-            tail.Insert(0, tail.Last());
-            tail.RemoveAt(tail.Count - 1);
-        }    
     }
 }

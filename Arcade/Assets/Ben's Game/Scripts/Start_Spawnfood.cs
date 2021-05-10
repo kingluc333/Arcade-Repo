@@ -16,43 +16,31 @@ public class Start_Spawnfood : MonoBehaviour
         float x = 0;
         float y = 0;
         int randx = Random.Range(0,2);
-        if (randx == 0)
+        do
         {
-            do
+            if (randx == 0)
             {
-            x = (int)Random.Range(borderLeft.position.x,
-                                    borderRight.position.x);
+                x = (int)Random.Range(borderLeft.position.x,
+                                        borderRight.position.x);
             }
-            while(tail_object.transform.position.x == x);
-        }
-        else
-        {
-            do
+            else
             {
-            x = ((int)Random.Range((borderLeft.position.x -.5f),
-                                    borderRight.position.x) + .5f);
+                x = ((int)Random.Range((borderLeft.position.x -.5f),
+                                        borderRight.position.x) + .5f);
             }
-            while(tail_object.transform.position.x == x);
-        }
-        int randy = Random.Range(0,2);
-        if (randy == 0)
-        {
-            do
+            int randy = Random.Range(0,2);
+            if (randy == 0)
             {
-            y = (int)Random.Range(borderBottom.position.y,
-                                    borderTop.position.y);
+                y = (int)Random.Range(borderBottom.position.y,
+                                        borderTop.position.y);
             }
-            while(tail_object.transform.position.y == y);
-        }
-        else
-        {
-            do
+            else
             {
-            y = ((int)Random.Range((borderBottom.position.y - .5f),
-                                    borderTop.position.y) +.5f);
+                y = ((int)Random.Range((borderBottom.position.y - .5f),
+                                        borderTop.position.y) +.5f);
             }
-            while(tail_object.transform.position.y == y);
         }
+        while((tail_object.transform.position.x, tail_object.transform.position.y) == (x, y));
         Instantiate(foodPrefab,
                     new Vector2(x, y),
                     Quaternion.identity);
