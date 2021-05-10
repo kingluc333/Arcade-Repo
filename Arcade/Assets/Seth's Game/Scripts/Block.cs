@@ -13,7 +13,7 @@ public class Block : MonoBehaviour
     //1 - Red, 2 - Green, 3 - Blue, 4 - Orange, 5 - Purple, 6 - Yellow, 7 - Cyan
     public int block_id;
 
-    Vector3 rounded_movement;
+    Vector3 clone_kick_position;
     Vector2[] rot_data;
     GameObject fallen_blocks_parent;
     
@@ -47,24 +47,35 @@ public class Block : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //Check if valid
+            if (CanRotate(rotation))
+            {
+                //Change rotation index
+                if (rotation == 4) { rotation = 1; } else rotation++;
 
-            //Change rotation index
-            if (rotation == 4) { rotation = 1; } else rotation++;
+                //Actual rotation
+                RotateBlock(gameObject, rotation);
+            }
+            else if (CanKick(rotation))
+            {
+                //Move to kick location
+                transform.position = clone_kick_position;
 
-            //Actual rotation
-            RotateBlock(gameObject, rotation);
+                //Change rotation index
+                if (rotation == 4) { rotation = 1; } else rotation++;
+
+                //Actual rotation
+                RotateBlock(gameObject, rotation);
+            }
         }
         //Move right
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            //Check if valid
-            if (IsAbleToMove(1, rotation)) { transform.Translate(Vector3.right); }
+            if (CanMove(1, rotation)) { transform.Translate(Vector3.right); }
         }
         //Move left
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            //Check if valid
-            if (IsAbleToMove(2, rotation)) { transform.Translate(Vector3.left); }
+            if (CanMove(2, rotation)) { transform.Translate(Vector3.left); }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -79,7 +90,7 @@ public class Block : MonoBehaviour
     {
         if (Time.time > previous_time + fall_interval)
         {
-            if (IsAbleToMove(3, rotation))
+            if (CanMove(3, rotation))
             {
                 transform.Translate(Vector3.down);
                 previous_time = Time.time;
@@ -87,21 +98,8 @@ public class Block : MonoBehaviour
         }
     }
 
-    //Actually rotates based off the rotation data
-    void RotateBlock (GameObject g, int rot)
-    {
-        //Give Rotation_Data the rotation and block_id, get a vector array in return
-        rot_data = Rotation_Data.GiveRotationData(block_id, rot);
-            
-        //Rotate the block
-        for (int i = 0; i < 4; i++) 
-        {
-            g.transform.GetChild(i).transform.localPosition = rot_data[i];
-        }
-    }
-
-    //Initiates the clone-check method for movement and returns the findings
-    bool IsAbleToMove (int move_type, int rot)
+    //Checking for L-R or D movement
+    bool CanMove (int move_type, int rot)
     {
         //Determining where to spawn clone
         Vector3 v = new Vector3(0f, 0f, 0f);
@@ -120,6 +118,65 @@ public class Block : MonoBehaviour
         bool canMove = !DoesCloneCollideOnMove(c);
         Destroy(c);
         return canMove;
+    }
+
+    //Checking for rotation
+    bool CanRotate (int rot)
+    {
+        //Incrementing rotation for clone
+        if (rotation == 4) { rot = 1; }
+        else { rot = rotation + 1; }
+
+        //Spawning clone with new rotation
+        GameObject c =  Instantiate(clone, transform.position, Quaternion.identity);
+        RotateBlock(c, rot);
+
+        //Checking for collision on rotation
+        bool can_rotate = !DoesCloneCollideOnMove(c);
+        Destroy(c);
+        return can_rotate;
+    }
+
+    //Checking for kicking
+    bool CanKick (int rot)
+    {
+        //Incrementing rotation for clone
+        if (rotation == 4) { rot = 1; }
+        else { rot = rotation + 1; }
+
+        //Spawning clone with new rotation
+        GameObject c =  Instantiate(clone, transform.position, Quaternion.identity);
+        RotateBlock(c, rot);
+
+        //Checks right, left, up, down, in that order; if no hit, records the location,
+        //deletes the clone and ends function; otherwise, moves on to the next one
+        //Checking right
+        c.transform.Translate(Vector3.right);
+        if (!DoesCloneCollideOnMove(c)) 
+        { clone_kick_position = c.transform.position; 
+          Destroy(c); return true; }
+        else { c.transform.Translate(new Vector3(-2, 0f, 0f)); }
+
+        //Checking left
+        if (!DoesCloneCollideOnMove(c)) 
+        { clone_kick_position = c.transform.position; 
+          Destroy(c); return true; }
+        else { c.transform.Translate(new Vector3(1, 1, 0)); }
+
+        //Checking up
+        if (!DoesCloneCollideOnMove(c)) 
+        { clone_kick_position = c.transform.position; 
+          Destroy(c); return true; } 
+        else { c.transform.Translate(new Vector3(0, -2, 0)); }
+
+        //Checking down
+        if (!DoesCloneCollideOnMove(c)) 
+        { clone_kick_position = c.transform.position; 
+          Destroy(c); return true; }
+
+        //Else, say we can't kick
+        Destroy(c);
+        return false;
     }
 
     //Checking for all collisions a movement clone may encounter
@@ -148,8 +205,16 @@ public class Block : MonoBehaviour
         return b;
     }
 
-    void IsAbleToRotate ()
+    //Actually rotates based off the rotation data
+    void RotateBlock (GameObject g, int rot)
     {
-
+        //Give Rotation_Data the rotation and block_id, get a vector array in return
+        rot_data = Rotation_Data.GiveRotationData(block_id, rot);
+            
+        //Rotate the block
+        for (int i = 0; i < 4; i++) 
+        {
+            g.transform.GetChild(i).transform.localPosition = rot_data[i];
+        }
     }
 }
