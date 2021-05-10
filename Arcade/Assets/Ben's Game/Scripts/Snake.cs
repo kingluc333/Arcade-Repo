@@ -13,6 +13,11 @@ public class Snake : MonoBehaviour
     public List<Transform> tail = new List<Transform>();
     public GameObject tailPrefab;
     public Text_Script middle_text;
+    public Transform wallT;
+    public Transform wallB;
+    public Transform wallR;
+    public Transform wallL;
+    bool move = false;
     void Start()
     {
         // after 1 second, Repeats the "Move" function every .11 seconds
@@ -24,13 +29,21 @@ public class Snake : MonoBehaviour
         if (!end)
         {
             if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
-                snake_dir = new Vector2(0.5f, 0);
-            if (Input.GetKey(KeyCode.LeftArrow) && snake_dir != new Vector2(0.5f, 0))
-                snake_dir = new Vector2(-0.5f, 0);
-            if (Input.GetKey(KeyCode.DownArrow) && snake_dir != new Vector2(0, 0.5f))
-                snake_dir = new Vector2(0, -0.5f);
-            if (Input.GetKey(KeyCode.UpArrow) && snake_dir != new Vector2(0, -0.5f))
+                {
+                    snake_dir = new Vector2(0.5f, 0);
+                }
+            if (Input.GetKey(KeyCode.LeftArrow) && (snake_dir != new Vector2(0.5f, 0)))
+                {
+                    snake_dir = new Vector2(-0.5f, 0);
+                }
+            if (Input.GetKey(KeyCode.DownArrow) && (snake_dir != new Vector2(0, 0.5f)))
+                {
+                    snake_dir = new Vector2(0, -0.5f);
+                }
+            if (Input.GetKey(KeyCode.UpArrow) && (snake_dir != new Vector2(0, -0.5f)))
+                {
                 snake_dir = new Vector2(0, 0.5f);
+                }
         }
         else
         {
@@ -58,8 +71,26 @@ public class Snake : MonoBehaviour
     }
     void Move()
     {
+        move = true;
         // 'v' is equal to the position of the snake head
         Vector2 v = transform.position;
+        // Tests whether or not the snake is about to hit the wall
+        if((move) && (snake_dir == new Vector2(.5f,0)) && ((wallR.position.x - transform.position.x) < .5f))
+            {
+                Gameover();
+            }
+        if((move) && (snake_dir == new Vector2(-.5f,0)) && ((transform.position.x - wallL.position.x) < .5f))
+            {
+                Gameover();
+            }
+        if((move) && (snake_dir == new Vector2(0, .5f)) && ((wallT.position.y - transform.position.y) < .5f))
+            {
+                Gameover();
+            }
+        if((move) && (snake_dir == new Vector2(0, -.5f)) && ((transform.position.y - wallB.position.y) < .5f))
+            {
+                Gameover();
+            }
         // then, the snake head is tranformed along a vector
         transform.Translate(snake_dir);
         if(!end)
@@ -85,10 +116,11 @@ public class Snake : MonoBehaviour
                 tail.Insert(0, tail.Last());
                 // Removes an object from the list at the second to last position
                 tail.RemoveAt(tail.Count - 1);
-            }  
+            } 
         }
         else
         {
+            // If the end function is called, then all tail elements are transformed along the exact same vector as the head
             foreach(Transform t in tail)
             {
                 t.transform.Translate(snake_dir);
@@ -99,7 +131,6 @@ public class Snake : MonoBehaviour
     void Gameover()
     {
         end = true;
-
         // Snake Pause causes the snake to pause, blink a few colors, and then drop off the screen
         StartCoroutine(snake_pause());
         IEnumerator snake_pause()
@@ -108,15 +139,35 @@ public class Snake : MonoBehaviour
             middle_text.middle_text.text = ("GAME OVER");
             yield return new WaitForSeconds(.4f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            foreach(Transform t in tail)
+            {
+                t.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            }
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            foreach(Transform t in tail)
+            {
+                t.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            }
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            foreach(Transform t in tail)
+            {
+                t.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            }
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            foreach(Transform t in tail)
+            {
+                t.GetComponent<Renderer>().material.color = new Color(255,255,255);
+            }
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
-            yield return new WaitForSeconds(2);
+            foreach(Transform t in tail)
+            {
+                t.GetComponent<Renderer>().material.color = new Color(255,0,0);
+            }
+            yield return new WaitForSeconds(1);
             snake_dir = new Vector2(0, -2);
 
         }
