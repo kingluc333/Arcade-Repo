@@ -1926,5 +1926,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ready_go
       objectReference: {fileID: 0}
+    - target: {fileID: 3964090015982584529, guid: 642529505ebc7cb498328e5254db1fac,
+        type: 3}
+      propertyPath: m_text
+      value: Middle Text
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 642529505ebc7cb498328e5254db1fac, type: 3}
