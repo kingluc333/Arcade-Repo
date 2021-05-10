@@ -6,10 +6,12 @@ public class Snake : MonoBehaviour
 {
     bool end = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
-    public Start_Spawnfood _Start_Spawnfood;   
+    public Start_Spawnfood _Start_Spawnfood;
+    private Collider snake_coll;
     void Start()
     {
         InvokeRepeating("Move", 1, 0.11f);
+        snake_coll = GetComponent<Collider>();
     }
     void Update()
     {   
@@ -51,6 +53,7 @@ public class Snake : MonoBehaviour
     {
         IEnumerator snake_pause()
         {
+            snake_coll.enabled = false;
             snake_dir = new Vector2(0, 0);
             yield return new WaitForSeconds(.4f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
@@ -64,6 +67,7 @@ public class Snake : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
             yield return new WaitForSeconds(3);
             snake_dir = new Vector2(0, -2);
+
         }
         Debug.Log("game over");
         (end) = true;
