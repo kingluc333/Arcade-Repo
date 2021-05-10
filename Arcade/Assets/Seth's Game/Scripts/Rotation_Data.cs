@@ -85,12 +85,104 @@ public static class Rotation_Data
     static Vector2[] b4 = { b4_1, b4_2, b4_3, b4_4 };
     #endregion
     #region Orange
+    static Vector2 o1_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 o1_2 = new Vector2(0.2f, -0.2f);
+    static Vector2 o1_3 = new Vector2(0.2f, 0.6f);
+    static Vector2 o1_4 = new Vector2(-0.2f, 0.6f);
+    static Vector2[] o1 = { o1_1, o1_2, o1_3, o1_4 };
+    //Rotation 2
+    static Vector2 o2_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 o2_2 = new Vector2(-0.2f, 0.2f);
+    static Vector2 o2_3 = new Vector2(0.6f, 0.2f);
+    static Vector2 o2_4 = new Vector2(0.6f, 0.6f);
+    static Vector2[] o2 = { o2_1, o2_2, o2_3, o2_4 };
+    //Rotation 3
+    static Vector2 o3_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 o3_2 = new Vector2(0.2f, 0.6f);
+    static Vector2 o3_3 = new Vector2(0.2f, -0.2f);
+    static Vector2 o3_4 = new Vector2(0.6f, -0.2f);
+    static Vector2[] o3 = { o3_1, o3_2, o3_3, o3_4 };
+    //Rotation 4
+    static Vector2 o4_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 o4_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 o4_3 = new Vector2(-0.2f, 0.2f);
+    static Vector2 o4_4 = new Vector2(-0.2f, -0.2f);
+    static Vector2[] o4 = { o4_1, o4_2, o4_3, o4_4 };
     #endregion
     #region Purple
+    static Vector2 p1_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 p1_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 p1_3 = new Vector2(0.2f, 0.6f);
+    static Vector2 p1_4 = new Vector2(-0.2f, 0.2f);
+    static Vector2[] p1 = { p1_1, p1_2, p1_3, p1_4 };
+    //Rotation 2
+    static Vector2 p2_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 p2_2 = new Vector2(0.2f, -0.2f);
+    static Vector2 p2_3 = new Vector2(0.6f, 0.2f);
+    static Vector2 p2_4 = new Vector2(0.2f, 0.6f);
+    static Vector2[] p2 = { p2_1, p2_2, p2_3, p2_4 };
+    //Rotation 3
+    static Vector2 p3_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 p3_2 = new Vector2(-0.2f, 0.2f);
+    static Vector2 p3_3 = new Vector2(0.2f, -0.2f);
+    static Vector2 p3_4 = new Vector2(0.6f, 0.2f);
+    static Vector2[] p3 = { p3_1, p3_2, p3_3, p3_4 };
+    //Rotation 4
+    static Vector2 p4_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 p4_2 = new Vector2(0.2f, 0.6f);
+    static Vector2 p4_3 = new Vector2(-0.2f, 0.2f);
+    static Vector2 p4_4 = new Vector2(0.2f, -0.2f);
+    static Vector2[] p4 = { p4_1, p4_2, p4_3, p4_4 };
     #endregion
     #region Yellow
+    static Vector2 y1_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 y1_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 y1_3 = new Vector2(0.6f, 0.6f);
+    static Vector2 y1_4 = new Vector2(0.2f, 0.6f);
+    static Vector2[] y1 = { y1_1, y1_2, y1_3, y1_4 };
+    //Rotation 2
+    static Vector2 y2_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 y2_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 y2_3 = new Vector2(0.6f, 0.6f);
+    static Vector2 y2_4 = new Vector2(0.2f, 0.6f);
+    static Vector2[] y2 = { y2_1, y2_2, y2_3, y2_4 };
+    //Rotation 3
+    static Vector2 y3_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 y3_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 y3_3 = new Vector2(0.6f, 0.6f);
+    static Vector2 y3_4 = new Vector2(0.2f, 0.6f);
+    static Vector2[] y3 = { y3_1, y3_2, y3_3, y3_4 };
+    //Rotation 4
+    static Vector2 y4_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 y4_2 = new Vector2(0.6f, 0.2f);
+    static Vector2 y4_3 = new Vector2(0.6f, 0.6f);
+    static Vector2 y4_4 = new Vector2(0.2f, 0.6f);
+    static Vector2[] y4 = { y4_1, y4_2, y4_3, y4_4 };
     #endregion
     #region Cyan
+    static Vector2 c1_1 = new Vector2(0.2f, 0.2f);
+    static Vector2 c1_2 = new Vector2(-0.2f, 0.2f);
+    static Vector2 c1_3 = new Vector2(0.6f, 0.2f);
+    static Vector2 c1_4 = new Vector2(1f, 0.2f);
+    static Vector2[] c1 = { c1_1, c1_2, c1_3, c1_4 };
+    //Rotation 2
+    static Vector2 c2_1 = new Vector2(0.2f, 0.6f);
+    static Vector2 c2_2 = new Vector2(0.2f, 1f);
+    static Vector2 c2_3 = new Vector2(0.2f, 0.2f);
+    static Vector2 c2_4 = new Vector2(0.2f, -0.2f);
+    static Vector2[] c2 = { c2_1, c2_2, c2_3, c2_4 };
+    //Rotation 3
+    static Vector2 c3_1 = new Vector2(0.6f, 0.6f);
+    static Vector2 c3_2 = new Vector2(1f, 0.6f);
+    static Vector2 c3_3 = new Vector2(0.2f, 0.6f);
+    static Vector2 c3_4 = new Vector2(-0.2f, 0.6f);
+    static Vector2[] c3 = { c3_1, c3_2, c3_3, c3_4 };
+    //Rotation 4
+    static Vector2 c4_1 = new Vector2(0.6f, 0.2f);
+    static Vector2 c4_2 = new Vector2(0.6f, -0.2f);
+    static Vector2 c4_3 = new Vector2(0.6f, 0.6f);
+    static Vector2 c4_4 = new Vector2(0.6f, 1f);
+    static Vector2[] c4 = { c4_1, c4_2, c4_3, c4_4 };
     #endregion
 
     public static Vector2[] GiveRotationData (int block_id, int rotation)
@@ -118,8 +210,24 @@ public static class Rotation_Data
         rot_arrays.Add(new Vector2(3, 3), b3);
         rot_arrays.Add(new Vector2(3, 4), b4);
         //Orange
+        rot_arrays.Add(new Vector2(4, 1), o1);
+        rot_arrays.Add(new Vector2(4, 2), o2);
+        rot_arrays.Add(new Vector2(4, 3), o3);
+        rot_arrays.Add(new Vector2(4, 4), o4);
         //Purple
+        rot_arrays.Add(new Vector2(5, 1), p1);
+        rot_arrays.Add(new Vector2(5, 2), p2);
+        rot_arrays.Add(new Vector2(5, 3), p3);
+        rot_arrays.Add(new Vector2(5, 4), p4);
         //Yellow
+        rot_arrays.Add(new Vector2(6, 1), y1);
+        rot_arrays.Add(new Vector2(6, 2), y2);
+        rot_arrays.Add(new Vector2(6, 3), y3);
+        rot_arrays.Add(new Vector2(6, 4), y4);
         //Cyan
+        rot_arrays.Add(new Vector2(7, 1), c1);
+        rot_arrays.Add(new Vector2(7, 2), c2);
+        rot_arrays.Add(new Vector2(7, 3), c3);
+        rot_arrays.Add(new Vector2(7, 4), c4);
     }
 }
