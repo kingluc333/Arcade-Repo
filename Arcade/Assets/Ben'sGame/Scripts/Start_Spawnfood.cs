@@ -16,7 +16,6 @@ public class Start_Spawnfood : MonoBehaviour
         float x = 0;
         float y = 0;
         int randx = Random.Range(0,2);
-        Debug.Log("spawn initiated");
         if (randx == 0)
         {
             do
@@ -57,7 +56,7 @@ public class Start_Spawnfood : MonoBehaviour
         Instantiate(foodPrefab,
                     new Vector2(x, y),
                     Quaternion.identity);
-        Debug.Log("Food Spawned");
+        Debug.Log("food spawned");
                            
     }
 

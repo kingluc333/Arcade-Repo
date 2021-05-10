@@ -6,10 +6,10 @@ public class Snake : MonoBehaviour
 {
     bool end = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
-    public Start_Spawnfood _Start_Spawnfood;
+    public Start_Spawnfood _Start_Spawnfood;   
     void Start()
     {
-        InvokeRepeating("Move", 0.11f, 0.11f);
+        InvokeRepeating("Move", 1, 0.11f);
     }
     void Update()
     {   
@@ -36,12 +36,14 @@ public class Snake : MonoBehaviour
     {
         if (coll.name.StartsWith("Food"))
         {
+            Debug.Log("Hit food");
             ate = true;
             Destroy(coll.gameObject);
             _Start_Spawnfood.Spawn();
         }
         if (coll.name.StartsWith("Tail") || coll.name.StartsWith("Wall"))
         {
+            Debug.Log("Hit tail or wall");
             Gameover();
         }
     }
@@ -53,7 +55,6 @@ public class Snake : MonoBehaviour
             yield return new WaitForSeconds(.4f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
             yield return new WaitForSeconds(.1f);
-            Debug.Log("finished second wait");
             gameObject.GetComponent<Renderer>().material.color = new Color(255,255,255);
             yield return new WaitForSeconds(.1f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
@@ -70,26 +71,25 @@ public class Snake : MonoBehaviour
     }
     void Move()
     {
-        Vector2 v = transform.position;
-
         // Move head into new direction (now there is a gap)
         // Do Movement Stuff...
+        Vector2 v = transform.position;
         transform.Translate(snake_dir);
-
         if (ate)
         {
+            Debug.Log("Food ate");
             GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
+
             tail.Insert(0, g.transform);
 
             ate = false;
         }
-
         // Does tail exist?
-        if (tail.Count> 0)
+        else if (tail.Count > 0)
         {
             tail.Last().position = v;
             tail.Insert(0, tail.Last());
-            tail.RemoveAt(tail.Count-1);
+            tail.RemoveAt(tail.Count - 1);
         }    
     }
 }
