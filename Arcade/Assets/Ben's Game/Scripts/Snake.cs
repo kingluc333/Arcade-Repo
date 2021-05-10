@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 public class Snake : MonoBehaviour
 {
+    // List of declared variables
     bool end = false;
     bool ate = false;
     Vector2 snake_dir = new Vector2(-0.5f, 0);
@@ -12,11 +13,12 @@ public class Snake : MonoBehaviour
     public GameObject tailPrefab;
     void Start()
     {
+        // after 1 second, Repeats the "Move" function every .11 seconds
         InvokeRepeating("Move", 1, 0.11f);
     }
     void Update()
     {   
-        
+        // Checks to see if Gameover has triggered "end" boolian to be true, if not then controls work
         if (!end)
         {
             if(Input.GetKey(KeyCode.RightArrow) && (snake_dir != new Vector2(-0.5f, 0)))
@@ -28,45 +30,76 @@ public class Snake : MonoBehaviour
             if (Input.GetKey(KeyCode.UpArrow) && snake_dir != new Vector2(0, -0.5f))
                 snake_dir = new Vector2(0, 0.5f);
         }
+        else
+        {
+            gameObject.GetComponent<Collider2D>().enabled = false;
+        }
     }
-    
+    //Function called when there is a trigger on any 2D collider with snake collider
     void OnTriggerEnter2D(Collider2D coll)
     {
+        // Checks to see if other collider is the food prefab
         if (coll.name.StartsWith("Food"))
         {
-            Debug.Log("Hit food");
+            // If so, ate becomes true and triggers the if statement in the move function,
+            // destroys the food, and then spawns a new food
             ate = true;
             Destroy(coll.gameObject);
             _Start_Spawnfood.Spawn();
         }
+        // Checks to see if other collider is the Tail prefab or any wall
         if (coll.name.StartsWith("Tail") || coll.name.StartsWith("Wall"))
         {
-            Debug.Log("Hit tail or wall");
+            // if so, Gameover function is triggered
             Gameover();
         }
     }
     void Move()
     {
+        // 'v' is equal to the position of the snake head
         Vector2 v = transform.position;
+        // then, the snake head is tranformed along a vector
         transform.Translate(snake_dir);
-        if (ate)
+        if(!end)
         {
-            Debug.Log("Food ate");
-            GameObject g = (GameObject)Instantiate(tailPrefab, v, Quaternion.identity);
+            // If statement checks if "ate" has been triggered by the collider
+            if (ate)
+            {   
+                // Gameobject g is the cloned tailPrefab at 'v'(snakehead position) with no rotation
+                GameObject g = Instantiate(tailPrefab, v, Quaternion.identity);
 
-            tail.Insert(0, g.transform);
-
-            ate = false;
+                // Inserts into the list "tail" the object "g" at position "0"
+                tail.Insert(0, g.transform);
+                ate = false;
+            }
+            // Checks whether or not there is more than 1 tail in the list and moves around the tails based on this
+            else if (tail.Count > 0)
+            {  
+                //This whole function just makes sure that each of the tails are added to the list to get the vector,
+                // and then removed from the list
+                // Sets the position tail in the last position of the list to vector "v" (the snakehead vector)
+                tail.Last().position = v;
+                // The last tail in the list is added to position 1
+                tail.Insert(0, tail.Last());
+                // Removes an object from the list at the second to last position
+                tail.RemoveAt(tail.Count - 1);
+            }  
         }
-        else if (tail.Count > 0)
+        else
         {
-            tail.Last().position = v;
-            tail.Insert(0, tail.Last());
-            tail.RemoveAt(tail.Count - 1);
-        }    
+            foreach(Transform t in tail)
+            {
+                t.transform.Translate(snake_dir);
+            }
+        }
     }
+    // Game over function sets boolian "end" to true and causes "snake pause" function
     void Gameover()
     {
+        end = true;
+
+        // Snake Pause causes the snake to pause, blink a few colors, and then drop off the screen
+        StartCoroutine(snake_pause());
         IEnumerator snake_pause()
         {
             snake_dir = new Vector2(0, 0);
@@ -84,8 +117,5 @@ public class Snake : MonoBehaviour
             snake_dir = new Vector2(0, -2);
 
         }
-        Debug.Log("game over");
-        (end) = true;
-        StartCoroutine(snake_pause());
     }
 }
