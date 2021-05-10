@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TMPro;
 public class Snake : MonoBehaviour
 {
     // List of declared variables
@@ -11,6 +12,7 @@ public class Snake : MonoBehaviour
     public Start_Spawnfood _Start_Spawnfood;
     public List<Transform> tail = new List<Transform>();
     public GameObject tailPrefab;
+    public Text_Script middle_text;
     void Start()
     {
         // after 1 second, Repeats the "Move" function every .11 seconds
@@ -103,6 +105,7 @@ public class Snake : MonoBehaviour
         IEnumerator snake_pause()
         {
             snake_dir = new Vector2(0, 0);
+            middle_text.middle_text.text = ("GAME OVER");
             yield return new WaitForSeconds(.4f);
             gameObject.GetComponent<Renderer>().material.color = new Color(255,0,0);
             yield return new WaitForSeconds(.1f);
