@@ -6,6 +6,7 @@ public class Text_Script : MonoBehaviour
 {
     // Start is called before the first frame update
     public TextMeshProUGUI score;
+    public GameObject play_Again;
     public TextMeshProUGUI middle_text;
     public Snake snake;
     void Start()
@@ -14,9 +15,9 @@ public class Text_Script : MonoBehaviour
         IEnumerator Ready_Go()
         {
             middle_text.text = ("READY");
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1);
             middle_text.text = ("GO!");
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1);
             middle_text.text = ("");
         }
     }
